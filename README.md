@@ -1,6 +1,22 @@
 # ActsAsHavingStringId
 A Rails plugin for exposing non-sequential (Youtube-like) string IDs instead of the sequential integer IDs provided by Rails.
 
+Before, your API may look like
+
+    GET /users/123
+    {
+      "id": 123,
+      "name": "Alice O'User"
+    }
+    
+After
+
+    GET /users/9w63Hubh4oL
+    {
+      "id": "9w63Hubh4oL",
+      "name": "Alice O'User"
+    }
+
 Exposing sequential integer IDs has several drawbacks:
 
 * Javascript has a 53-bit limit for integers (see https://dev.twitter.com/overview/api/twitter-ids-json-and-snowflake), which is a problem if you have large IDs
