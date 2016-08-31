@@ -13,7 +13,7 @@ Rails makes heavy use of sequential integer IDs internally, but there's no need 
 
 The representation looks something like "E0znqip4mRA".
 
-`tea` above is the "New variant" of the (Tiny Encryption Algorithm)[https://en.wikipedia.org/wiki/Tiny_Encryption_Algorithm]. You should probably not consider your id to be forever secret, but it should be pretty hard to figure out from the string representation.
+`tea` above is the "New variant" of the [Tiny Encryption Algorithm](https://en.wikipedia.org/wiki/Tiny_Encryption_Algorithm). You should probably not consider your id to be forever secret, but it should be pretty hard to figure out from the string representation.
 
 Your controllers will continue to work without modification, but will suddenly start to accept the string ids. So if http://example.com/orders/104 worked before, something like http://example.com/orders/E0znqip4mRA should magically work.
 
@@ -87,7 +87,7 @@ $ gem install acts_as_having_string_id
 To contribute, fork the repo, edit the code and create a pull request with tests. :)
 
 ## Acknowledgements
-The Tiny Encryption Algorithm was created by David Wheeler and Roger Needham of the Cambridge Computer Laboratory. This library's implementation is based on (this code)[https://github.com/pmarreck/ruby-snippets/blob/master/TEA.rb] by Jeremy Hinegardner.
+The Tiny Encryption Algorithm was created by David Wheeler and Roger Needham of the Cambridge Computer Laboratory. This library's implementation is based on [this code](https://github.com/pmarreck/ruby-snippets/blob/master/TEA.rb) by Jeremy Hinegardner.
 
 ## License
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
