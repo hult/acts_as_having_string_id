@@ -78,6 +78,8 @@ All ActiveRecord functions will also accept the string representation as input:
 
 ## TODO
 * Publish on rubygems
+* Add a few tests on actual values (to prevent the algorithm from changing behavior when code changes)
+* Add a longer-running test that encrypts/decrypts a lot of values and ensures they're all unique and can be reversed
 * Rename `tea_key` secret to `string_id_key`
 * How to get rid of the include?
 * Since the `MyModel.find("7EajpSfdWIf")` functionality depends on the argument now being a string, `MyModel.find("5")` will no longer mean `MyModel.find(5)`, but rather `MyModel.find(4387534)` or something. Is that a problem?
