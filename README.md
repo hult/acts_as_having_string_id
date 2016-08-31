@@ -65,6 +65,7 @@ All ActiveRecord functions will also accept the string representation as input:
 * Rename `tea_key` secret to `string_id_key`
 * How to get rid of the include?
 * Since the `MyModel.find("7EajpSfdWIf")` functionality depends on the argument now being a string, `MyModel.find("5")` will no longer mean `MyModel.find(5)`, but rather MyModel.find(4387534) or something. Is that a problem?
+* Although TEA handles (and outputs) 64-bit ids, we currently limit the input to 32-bit
 
 ## Installation
 Add this line to your application's Gemfile:
