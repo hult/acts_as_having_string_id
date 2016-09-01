@@ -15,7 +15,7 @@ module ActsAsHavingStringId
     end
 
     def _tea
-      pass_phrase = self.class.name + Rails.application.secrets.tea_key
+      pass_phrase = self.class.name + Rails.application.secrets.string_id_key
       @_tea ||= ActsAsHavingStringId::TEA.new(pass_phrase)
     end
   end

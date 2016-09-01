@@ -25,7 +25,7 @@ Exposing sequential integer IDs has several drawbacks:
 
 Rails makes heavy use of sequential integer IDs internally, but there's no need of exposing them. `ActsAsHavingStringId` provides an alternative string representation of your IDs. This representation is
 
-    base62(tea(id, md5(ModelClass.name + Rails.application.secrets.tea_key)))
+    base62(tea(id, md5(ModelClass.name + Rails.application.secrets.string_id_key)))
 
 The representation looks something like "E0znqip4mRA".
 
@@ -39,13 +39,13 @@ You do however need to take care never to expose the `id` member of your models.
 First, set up your `secrets.yml`:
 
     development:
-      tea_key: notverysecret
+      string_id_key: notverysecret
 
     test:
-      tea_key: notverysecreteither
+      string_id_key: notverysecreteither
 
     production:
-      tea_key: <%= ENV["TEA_KEY"] %>
+      string_id_key: <%= ENV["STRING_ID_KEY"] %>
 
 Then, call the method in your model class:
 
@@ -82,7 +82,6 @@ And that's just about it!
 
 ## TODO
 * Publish on rubygems
-* Rename `tea_key` secret to `string_id_key`
 * Since the `MyModel.find("7EajpSfdWIf")` functionality depends on the argument now being a string, `MyModel.find("5")` will no longer mean `MyModel.find(5)`, but rather `MyModel.find(4387534)` or something. Is that a problem?
 * It's a potential security problem that we don't force strings from controllers (integer id coming from JSON postdata will make it find by original id)
 * Although TEA handles (and outputs) 64-bit ids, we currently limit the input to 32-bit
