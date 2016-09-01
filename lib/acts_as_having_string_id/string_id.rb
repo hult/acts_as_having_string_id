@@ -1,5 +1,3 @@
-require 'tea.rb'
-
 module ActsAsHavingStringId
   class StringId < ActiveRecord::Type::Value
     def initialize(tea)
