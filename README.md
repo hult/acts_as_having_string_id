@@ -68,6 +68,18 @@ All ActiveRecord functions will also accept the string representation as input:
     > MyModel.where(id: "7EajpSfdWIf")
     => #<ActiveRecord::Relation [#<MyModel id: 1, created_at: "2016-08-31 13:27:02", updated_at: "2016-08-31 13:27:02">]>
 
+Then, for exposing your string ID, use the `id_string` method. For example, if you're using [ActiveModelSerializers](https://github.com/rails-api/active_model_serializers):
+
+    class UserSerializer < ActiveModel::Serializer
+      attributes :id, :name
+
+      def id
+        object.id_string
+      end
+    end
+
+And that's just about it!
+
 ## TODO
 * Publish on rubygems
 * Rename `tea_key` secret to `string_id_key`
