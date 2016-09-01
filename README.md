@@ -8,7 +8,7 @@ Before, your API may look like
       "id": 123,
       "name": "Alice O'User"
     }
-    
+
 After
 
     GET /users/9w63Hubh4oL
@@ -20,7 +20,7 @@ After
 Exposing sequential integer IDs has several drawbacks:
 
 * Javascript has a 53-bit limit for integers (see https://dev.twitter.com/overview/api/twitter-ids-json-and-snowflake), which is a problem if you have large IDs
-* Perhaps you don't want objects to be easily enumerable, even if they're public (if you know about http://example.com/documents/104, it's way to easy to find document 105)
+* Perhaps you don't want objects to be easily enumerable, even if they're public (if you know about http://example.com/documents/104, it's way too easy to find document 105)
 * Sequential IDs make it easy to know how much usage your product gets (if my newly created user is http://example.com/users/1337, your product probably has 1,337 users)
 
 Rails makes heavy use of sequential integer IDs internally, but there's no need of exposing them. `ActsAsHavingStringId` provides an alternative string representation of your IDs. This representation is
@@ -78,8 +78,6 @@ All ActiveRecord functions will also accept the string representation as input:
 
 ## TODO
 * Publish on rubygems
-* Add a few tests on actual values (to prevent the algorithm from changing behavior when code changes)
-* Add a longer-running test that encrypts/decrypts a lot of values and ensures they're all unique and can be reversed
 * Rename `tea_key` secret to `string_id_key`
 * How to get rid of the include?
 * Since the `MyModel.find("7EajpSfdWIf")` functionality depends on the argument now being a string, `MyModel.find("5")` will no longer mean `MyModel.find(5)`, but rather `MyModel.find(4387534)` or something. Is that a problem?
