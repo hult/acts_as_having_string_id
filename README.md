@@ -47,14 +47,6 @@ First, set up your `secrets.yml`:
     production:
       tea_key: <%= ENV["TEA_KEY"] %>
 
-Then, include the module in your `ApplicationRecord`:
-
-    class ApplicationRecord < ActiveRecord::Base
-      include ActsAsHavingStringId
-
-      self.abstract_class = true
-    end
-
 Then, call the method in your model class:
 
     class MyModel < ApplicationRecord
@@ -79,7 +71,6 @@ All ActiveRecord functions will also accept the string representation as input:
 ## TODO
 * Publish on rubygems
 * Rename `tea_key` secret to `string_id_key`
-* How to get rid of the include?
 * Since the `MyModel.find("7EajpSfdWIf")` functionality depends on the argument now being a string, `MyModel.find("5")` will no longer mean `MyModel.find(5)`, but rather `MyModel.find(4387534)` or something. Is that a problem?
 * It's a potential security problem that we don't force strings from controllers (integer id coming from JSON postdata will make it find by original id)
 * Although TEA handles (and outputs) 64-bit ids, we currently limit the input to 32-bit

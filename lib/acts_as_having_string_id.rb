@@ -1,6 +1,7 @@
 require 'base62'
 require 'tea.rb'
 require 'string_id.rb'
+require 'acts_as_having_string_id/railtie' if defined?(Rails)
 
 module ActsAsHavingStringId
   extend ActiveSupport::Concern
