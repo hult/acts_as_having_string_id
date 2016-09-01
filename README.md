@@ -81,6 +81,8 @@ Then, for exposing your string ID, use the `id_string` method. For example, if y
 And that's just about it!
 
 ## TODO
+* The integer representation of a string ID should be accessible using something like `MyModel.id_int(s)`
+* You should be able to do `MyOtherModel.create! my_model_id: "KuUnDvpJYS2"` and `my_other_model.my_model_id = "KuUnDvpJYS2"`
 * Since the `MyModel.find("7EajpSfdWIf")` functionality depends on the argument now being a string, `MyModel.find("5")` will no longer mean `MyModel.find(5)`, but rather `MyModel.find(4387534)` or something. Is that a problem?
 * It's a potential security problem that we don't force strings from controllers (integer id coming from JSON postdata will make it find by original id)
 * Although TEA handles (and outputs) 64-bit ids, we currently limit the input to 32-bit
