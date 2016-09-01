@@ -7,7 +7,7 @@ class ActsAsHavingStringId::Test < ActiveSupport::TestCase
 
   test "id_string method works" do
     m = MyModel.new(id: 1)
-    assert_equal "HIczBcO7kDa", MyModel.new(id: 1).id_string
+    assert_equal "GBpjdLndSR0", MyModel.new(id: 1).id_string
   end
 
   test "allows finding by the string representation" do
