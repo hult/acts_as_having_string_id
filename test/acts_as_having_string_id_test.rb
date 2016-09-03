@@ -10,6 +10,14 @@ class ActsAsHavingStringId::Test < ActiveSupport::TestCase
     assert_equal "GBpjdLndSR0", MyModel.new(id: 1).id_string
   end
 
+  test "id_string class method works" do
+    assert_equal "GBpjdLndSR0", MyModel.id_string(1)
+  end
+
+  test "id_int class method works" do
+    assert_equal 1, MyModel.id_int("GBpjdLndSR0")
+  end
+
   test "allows finding by the string representation" do
     m = MyModel.create!
     n = MyModel.find(m.id_string)
