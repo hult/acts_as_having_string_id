@@ -114,7 +114,15 @@ $ gem install acts_as_having_string_id
 ```
 
 ## Contributing
-To contribute, fork the repo, edit the code and create a pull request with tests. :)
+To contribute, fork and clone the repo, edit the code. Add tests, run them using
+
+    bin/test
+
+Then create a pull request.
+
+To build the gem (this is mostly for myself), run
+
+    gem build acts_as_having_string_id.gemspec
 
 ## Acknowledgements
 The Tiny Encryption Algorithm was created by David Wheeler and Roger Needham of the Cambridge Computer Laboratory. This library's implementation is based on [this code](https://github.com/pmarreck/ruby-snippets/blob/master/TEA.rb) by Jeremy Hinegardner.
