@@ -10,7 +10,18 @@ module ActsAsHavingStringId
     def acts_as_having_string_id(options = {})
       class_eval do
         attribute :id, ActsAsHavingStringId::StringId.new(_tea)
+
+        def self.id_string(id)
+          # Return the string representation of id
+          _tea.encrypt(id).base62_encode
+        end
+
+        def self.id_int(id_string)
+          # Return the id from a string representation
+          _tea.decrypt(id_string.base62_decode)
+        end
       end
+
       include ActsAsHavingStringId::LocalInstanceMethods
     end
 
@@ -22,7 +33,7 @@ module ActsAsHavingStringId
 
   module LocalInstanceMethods
     def id_string
-      self.class._tea.encrypt(id).base62_encode
+      self.class.id_string(id)
     end
   end
 end
