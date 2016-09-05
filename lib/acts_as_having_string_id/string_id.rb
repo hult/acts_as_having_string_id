@@ -1,13 +1,13 @@
 module ActsAsHavingStringId
   class StringId
     class Type < ActiveRecord::Type::Value
-      def initialize(tea)
-        @tea = tea
+      def initialize(klass)
+        @klass = klass
       end
 
       def serialize(value)
         if value.is_a? String
-          i = @tea.decrypt(value.base62_decode)
+          i = @klass.id_int(value)
           if i >= 2**31
             # Since Postgres SERIAL is a signed 32-bit integer, we can
             # only represent integers up until (2**32)-1. If we're
