@@ -51,6 +51,6 @@ class ActsAsHavingStringId::Test < ActiveSupport::TestCase
 
   test "assigning an int foreign key works" do
     o = MyOtherModel.new my_model_id: 5
-    assert_equal ActsAsHavingStringId::StringId.new(5), o.my_model_id
+    assert_equal ActsAsHavingStringId::StringId.new(MyModel, 5), o.my_model_id
   end
 end
