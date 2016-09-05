@@ -39,6 +39,8 @@ module ActsAsHavingStringId
         puts "DESERIALIZE '#{value}' #{value.class.name}"
         if value.is_a?(String) || value.is_a?(Fixnum)
           ActsAsHavingStringId::StringId(@klass, value)
+        elsif value == nil
+          nil
         else
           super
         end
