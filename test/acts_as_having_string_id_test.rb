@@ -34,8 +34,13 @@ class ActsAsHavingStringId::Test < ActiveSupport::TestCase
     assert_equal m, nsi
   end
 
-  test "assigning an int foreign key works" do
-    o = MyOtherModel.new my_model_id: 5
-    assert_equal ActsAsHavingStringId::StringId.new(MyModel, 5), o.my_model_id
+  test "assigning foreign keys both as int, string and StringId works" do
+    si5 = ActsAsHavingStringId::StringId.new(MyModel, 5)
+    o = MyOtherModel.new my_model_id: si5.to_i
+    assert_equal si5, o.my_model_id
+    o = MyOtherModel.new my_model_id: si5.to_s
+    assert_equal si5, o.my_model_id
+    o = MyOtherModel.new my_model_id: si5
+    assert_equal si5, o.my_model_id
   end
 end
