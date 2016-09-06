@@ -6,10 +6,4 @@ class ActsAsHavingStringId::StringIdTest < ActiveSupport::TestCase
     id = MyModel.id_string(123456)
     assert_equal 123456, string_id_type.serialize(id)
   end
-
-  test "to prevent postgres overflows, large numbers are serialized as -1" do
-    string_id_type = ActsAsHavingStringId::StringId::Type.new(MyModel)
-    id = MyModel.id_string(2**31)
-    assert_equal -1, string_id_type.serialize(id)
-  end
 end

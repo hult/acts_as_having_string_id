@@ -32,8 +32,8 @@ module ActsAsHavingStringId
   end
 
   module LocalInstanceMethods
-    def id_string
-      self.class.id_string(id)
-    end
+    # def id_string
+    #   self.class.id_string(id)
+    # end
   end
 end
