@@ -1,17 +1,17 @@
 module ActsAsHavingStringId
   class StringId
-    attr_accessor :string_value, :int_value
+    attr_reader :string_value, :int_value
 
     def initialize(klass, value)
       if value == nil
-        self.string_value = nil
-        self.int_value = nil
+        @string_value = nil
+        @int_value = nil
       elsif value.is_a? String
-        self.string_value = value
-        self.int_value = klass.id_int(value)
+        @string_value = value
+        @int_value = klass.id_int(value)
       else
-        self.int_value = value
-        self.string_value = klass.id_string(value)
+        @int_value = value
+        @string_value = klass.id_string(value)
       end
     end
 
