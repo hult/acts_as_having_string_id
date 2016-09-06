@@ -29,19 +29,11 @@ module ActsAsHavingStringId
           _tea.decrypt(id_string.base62_decode)
         end
       end
-
-      include ActsAsHavingStringId::LocalInstanceMethods
     end
 
     def _tea
       pass_phrase = name + Rails.application.secrets.string_id_key
       @_tea ||= ActsAsHavingStringId::TEA.new(pass_phrase)
     end
-  end
-
-  module LocalInstanceMethods
-    # def id_string
-    #   self.class.id_string(id)
-    # end
   end
 end
