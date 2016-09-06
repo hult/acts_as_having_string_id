@@ -9,7 +9,15 @@ module ActsAsHavingStringId
   module ClassMethods
     def acts_as_having_string_id(options = {})
       class_eval do
-        attribute :id, ActsAsHavingStringId::StringId::Type.new(self)
+        attrib_type = ActsAsHavingStringId::StringId::Type.new(self)
+        attribute :id, attrib_type
+
+        self.reflections.each_value do |r|
+          # Attribute all foreign keys pointing here as well
+          r.klass.class_eval do
+            attribute r.foreign_key.to_sym, attrib_type
+          end
+        end
 
         def self.id_string(id)
           # Return the string representation of id
