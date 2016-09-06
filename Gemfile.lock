@@ -116,6 +116,7 @@ PLATFORMS
 
 DEPENDENCIES
   acts_as_having_string_id!
+  minitest
   sqlite3
 
 BUNDLED WITH
