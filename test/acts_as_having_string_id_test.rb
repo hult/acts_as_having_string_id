@@ -6,11 +6,8 @@ class ActsAsHavingStringId::Test < ActiveSupport::TestCase
     assert m.id.is_a?(ActsAsHavingStringId::StringId)
   end
 
-  test "id_string class method works" do
+  test "id_string and id_int class methods work" do
     assert_equal "GBpjdLndSR0", MyModel.id_string(1)
-  end
-
-  test "id_int class method works" do
     assert_equal 1, MyModel.id_int("GBpjdLndSR0")
   end
 
