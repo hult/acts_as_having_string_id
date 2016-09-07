@@ -41,7 +41,11 @@ module ActsAsHavingStringId
       end
 
       def cast(value)
-        ActsAsHavingStringId::StringId(@klass, value)
+        if value == nil
+          nil
+        else
+          ActsAsHavingStringId::StringId(@klass, value)
+        end
       end
 
       def deserialize(value)
@@ -55,7 +59,11 @@ module ActsAsHavingStringId
       end
 
       def serialize(value)
-        ActsAsHavingStringId::StringId(@klass, value).int_value
+        if value == nil
+          nil
+        else
+          ActsAsHavingStringId::StringId(@klass, value).int_value
+        end
       end
     end
   end

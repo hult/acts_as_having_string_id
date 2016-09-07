@@ -32,4 +32,9 @@ class ActsAsHavingStringId::StringIdTest < ActiveSupport::TestCase
     assert_equal ActsAsHavingStringId::StringId.new(MyModel, "GBpjdLndSR0"),
       ActsAsHavingStringId::StringId.new(MyModel, 1)
   end
+
+  test "cast nil to nil" do
+    string_id_type = ActsAsHavingStringId::StringId::Type.new(MyModel)
+    assert_nil string_id_type.cast(nil)
+  end
 end
