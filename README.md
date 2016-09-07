@@ -17,12 +17,25 @@ After
       "name": "Alice O'User"
     }
 
+## Problem
 Exposing sequential integer IDs has several drawbacks:
 
 * Javascript has a 53-bit limit for integers (see https://dev.twitter.com/overview/api/twitter-ids-json-and-snowflake), which is a problem if you have large IDs
 * Perhaps you don't want objects to be easily enumerable, even if they're public (if you know about http://example.com/documents/104, it's way too easy to find document 105)
 * Sequential IDs make it easy to know how much usage your product gets (if my newly created user is http://example.com/users/1337, your product probably has 1,337 users)
 
+## Why not use UUIDs?
+"But why not just use UUIDs", you ask? Rails has built-in support for them. But they are very long. Exposing them in an API is okay, but in a URL just doesn't look nice
+
+    http://example.com/objects/be398f64-320f-4731-be73-74699e6795bc
+    
+Even base62 encoding that ID is very long
+
+    http://example.com/objects/27WzQMxpvINgio2w5Xt0hk
+    
+64-bit integers would be optimal, but they can't be random: the risk of collisions would be too high.
+
+## Our solution
 Rails makes heavy use of sequential integer IDs internally, but there's no need of exposing them. `ActsAsHavingStringId` provides an alternative string representation of your IDs. This representation is
 
     base62(tea(id, md5(ModelClass.name + Rails.application.secrets.string_id_key)))
