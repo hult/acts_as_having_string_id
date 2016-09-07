@@ -10,11 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160831154923) do
+ActiveRecord::Schema.define(version: 20160905131432) do
 
   create_table "my_models", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "my_other_models", force: :cascade do |t|
+    t.integer  "my_model_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["my_model_id"], name: "index_my_other_models_on_my_model_id"
   end
 
 end

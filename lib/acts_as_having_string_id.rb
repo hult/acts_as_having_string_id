@@ -9,7 +9,15 @@ module ActsAsHavingStringId
   module ClassMethods
     def acts_as_having_string_id(options = {})
       class_eval do
-        attribute :id, ActsAsHavingStringId::StringId.new(_tea)
+        attrib_type = ActsAsHavingStringId::StringId::Type.new(self)
+        attribute :id, attrib_type
+
+        self.reflections.each_value do |r|
+          # Attribute all foreign keys pointing here as well
+          r.klass.class_eval do
+            attribute r.foreign_key.to_sym, attrib_type
+          end
+        end
 
         def self.id_string(id)
           # Return the string representation of id
@@ -21,19 +29,11 @@ module ActsAsHavingStringId
           _tea.decrypt(id_string.base62_decode)
         end
       end
-
-      include ActsAsHavingStringId::LocalInstanceMethods
     end
 
     def _tea
       pass_phrase = name + Rails.application.secrets.string_id_key
       @_tea ||= ActsAsHavingStringId::TEA.new(pass_phrase)
-    end
-  end
-
-  module LocalInstanceMethods
-    def id_string
-      self.class.id_string(id)
     end
   end
 end
