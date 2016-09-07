@@ -33,8 +33,6 @@ The representation looks something like "E0znqip4mRA".
 
 Your controllers will continue to work without modification, but will start to accept string IDs. So if http://example.com/orders/104 worked before, something like http://example.com/orders/E0znqip4mRA should magically work.
 
-You do however need to take care never to expose the `id` member of your models. Instead, use `id_string`.
-
 ## Usage
 First, set up your `secrets.yml`:
 
@@ -47,43 +45,51 @@ First, set up your `secrets.yml`:
     production:
       string_id_key: <%= ENV["STRING_ID_KEY"] %>
 
-Then, call the method in your model class:
+Then, call the method in your model class, after any relations to other models:
 
     class MyModel < ApplicationRecord
+       has_many :my_other_model
        acts_as_having_string_id
     end
 
-The string representation is now available as `id_string` on your model object. As an example:
+The id of your model will now not be an int, but rather an instance of `ActsAsHavingStringId::StringId`. As an example:
 
     > m = MyModel.create!
     > m.id
+    => 1/7EajpSfdWIf
+    > m.id.to_i
     => 1
-    > m.id_string
+    > m.id.to_s
     => "7EajpSfdWIf"
 
-All ActiveRecord functions will also accept the string representation as input:
+All ActiveRecord functions will continue to accept int IDs, but will now also accept the string representation as input:
 
     > MyModel.find("7EajpSfdWIf")
-    => #<MyModel id: 1, created_at: "2016-08-31 13:27:02", updated_at: "2016-08-31 13:27:02">
+    => #<MyModel id: 1/7EajpSfdWIf, created_at: "2016-08-31 13:27:02", updated_at: "2016-08-31 13:27:02">
     > MyModel.where(id: "7EajpSfdWIf")
-    => #<ActiveRecord::Relation [#<MyModel id: 1, created_at: "2016-08-31 13:27:02", updated_at: "2016-08-31 13:27:02">]>
+    => #<ActiveRecord::Relation [#<MyModel id: 1/7EajpSfdWIf, created_at: "2016-08-31 13:27:02", updated_at: "2016-08-31 13:27:02">]>
+    
+In all associated models, foreign keys to your model will also be this new type of id.
 
-Then, for exposing your string ID, use the `id_string` method. For example, if you're using [ActiveModelSerializers](https://github.com/rails-api/active_model_serializers):
+    > MyOtherModel.create! my_model: MyModel.first
+    => #<MyOtherModel id: 1, my_model_id: 1/GBpjdLndSR0, created_at: "2016-09-07 10:32:24", updated_at: "2016-09-07 10:32:24"> 
+
+Then, for exposing your string ID, make sure to always use `id.to_s`. For example, if you're using [ActiveModelSerializers](https://github.com/rails-api/active_model_serializers):
 
     class UserSerializer < ActiveModel::Serializer
       attributes :id, :name
 
       def id
-        object.id_string
+        object.id.to_s
       end
     end
 
-You can also get the string representation of an id without having the instance
+You can get the string representation of an ID from a class without having the instance
 
     > MyModel.id_string(1)
     => "7EajpSfdWIf"
 
-And, conversely, getting the id from the string representation
+And, conversely, getting the ID from the string representation
 
     > MyModel.id_int("7EajpSfdWIf")
     => 1
@@ -91,10 +97,8 @@ And, conversely, getting the id from the string representation
 And that's just about it!
 
 ## TODO
-* You should be able to do `MyOtherModel.create! my_model_id: "KuUnDvpJYS2"` and `my_other_model.my_model_id = "KuUnDvpJYS2"`
 * Since the `MyModel.find("7EajpSfdWIf")` functionality depends on the argument now being a string, `MyModel.find("5")` will no longer mean `MyModel.find(5)`, but rather `MyModel.find(4387534)` or something. Is that a problem?
 * It's a potential security problem that we don't force strings from controllers (integer id coming from JSON postdata will make it find by original id)
-* Although TEA handles (and outputs) 64-bit ids, we currently limit the input to 32-bit
 
 ## Installation
 Add this line to your application's Gemfile:
