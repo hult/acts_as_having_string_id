@@ -1,4 +1,6 @@
 language: ruby
 rvm:
   - 2.2.2
+before_script:
+  - "(cd test/dummy && bin/rails db:migrate RAILS_ENV=test)"
 script: bin/test
