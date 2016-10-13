@@ -10,7 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160905131432) do
+ActiveRecord::Schema.define(version: 20161013082302) do
+
+  create_table "details", force: :cascade do |t|
+    t.integer  "my_other_model_id"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.index ["my_other_model_id"], name: "index_details_on_my_other_model_id"
+  end
 
   create_table "my_models", force: :cascade do |t|
     t.datetime "created_at", null: false

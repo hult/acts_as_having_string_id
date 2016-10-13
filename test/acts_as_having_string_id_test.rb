@@ -40,4 +40,11 @@ class ActsAsHavingStringId::Test < ActiveSupport::TestCase
     o = MyOtherModel.new my_model_id: si5
     assert_equal si5, o.my_model_id
   end
+
+  test "following a has_many :through relation works" do
+    my_model = MyModel.create!
+    my_other_model = MyOtherModel.create! my_model: my_model
+    detail = Detail.create! my_other_model: my_other_model
+    assert_includes my_model.details, detail
+  end
 end
