@@ -19,6 +19,14 @@ module ActsAsHavingStringId
       "#{int_value}/#{string_value}"
     end
 
+    def id
+      int_value
+    end
+
+    def quoted_id
+      int_value
+    end
+
     def to_s
       string_value
     end
