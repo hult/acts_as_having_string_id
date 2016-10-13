@@ -14,8 +14,10 @@ module ActsAsHavingStringId
 
         self.reflections.each_value do |r|
           # Attribute all foreign keys pointing here as well
-          r.klass.class_eval do
-            attribute r.foreign_key.to_sym, attrib_type
+          unless r.is_a? ActiveRecord::Reflection::ThroughReflection
+            r.klass.class_eval do
+              attribute r.foreign_key.to_sym, attrib_type
+            end
           end
         end
 
