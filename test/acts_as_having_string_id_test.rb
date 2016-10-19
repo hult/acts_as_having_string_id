@@ -41,6 +41,12 @@ class ActsAsHavingStringId::Test < ActiveSupport::TestCase
     assert_equal si5, o.my_model_id
   end
 
+  test "finding by an invalid string id gives a 404" do
+    assert_raises ActiveRecord::RecordNotFound do
+      MyModel.find("alice@example.com")
+    end
+  end
+
   test "following a has_many :through relation works" do
     my_model = MyModel.create!
     my_other_model = MyOtherModel.create! my_model: my_model
