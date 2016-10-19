@@ -28,7 +28,12 @@ module ActsAsHavingStringId
 
         def self.id_int(id_string)
           # Return the id from a string representation
-          _tea.decrypt(id_string.base62_decode)
+          begin
+            id_int = id_string.base62_decode
+          rescue
+            return nil
+          end
+          _tea.decrypt(id_int)
         end
       end
     end
