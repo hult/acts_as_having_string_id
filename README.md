@@ -131,7 +131,7 @@ $ gem install acts_as_having_string_id
 ```
 
 ## Contributing
-To contribute, fork and clone the repo, edit the code. Add tests, run them using
+To contribute, fork and clone the repo, edit the code (don't change the version number of the gem). Add tests, run them using
 
     bin/test
 
