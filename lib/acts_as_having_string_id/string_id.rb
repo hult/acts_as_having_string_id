@@ -57,7 +57,7 @@ module ActsAsHavingStringId
       end
 
       def deserialize(value)
-        if value.is_a?(String) || value.is_a?(Fixnum)
+        if value.is_a?(String) || value.class <= Integer
           ActsAsHavingStringId::StringId(@klass, value)
         elsif value == nil
           nil
