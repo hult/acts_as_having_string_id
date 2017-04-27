@@ -1,0 +1,2 @@
+class D < ApplicationRecord
+end
