@@ -60,10 +60,12 @@ First, set up your `secrets.yml`:
 
 Then, call the method in your model class, after any relations to other models:
 
-    class MyModel < ApplicationRecord
-       has_many :my_other_model
-       acts_as_having_string_id
-    end
+```ruby
+class MyModel < ApplicationRecord
+  has_many :my_other_model
+  acts_as_having_string_id
+end
+```
 
 The id of your model will now not be an int, but rather an instance of `ActsAsHavingStringId::StringId`. As an example:
 
@@ -89,13 +91,15 @@ In all associated models, foreign keys to your model will also be this new type 
 
 Then, for exposing your string ID, make sure to always use `id.to_s`. For example, if you're using [ActiveModelSerializers](https://github.com/rails-api/active_model_serializers):
 
-    class UserSerializer < ActiveModel::Serializer
-      attributes :id, :name
+```ruby
+class UserSerializer < ActiveModel::Serializer
+  attributes :id, :name
 
-      def id
-        object.id.to_s
-      end
-    end
+  def id
+    object.id.to_s
+  end
+end
+```
 
 You can get the string representation of an ID from a class without having the instance
 
