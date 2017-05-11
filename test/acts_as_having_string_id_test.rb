@@ -83,7 +83,7 @@ class ActsAsHavingStringId::Test < ActiveSupport::TestCase
     a = A.create!
     e = ::E.create! a: a
 
-    refute a.respond_to? e_id
+    refute a.respond_to? :e_id
     assert e.a_id.is_a? ActsAsHavingStringId::StringId
   end
 end
