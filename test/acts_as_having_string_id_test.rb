@@ -81,9 +81,7 @@ class ActsAsHavingStringId::Test < ActiveSupport::TestCase
 
   test "has_one relationship" do
     a = A.create!
-    p E
-    p E.class
-    e = E.create! a: a
+    e = ::E.create! a: a
 
     refute a.respond_to? e_id
     assert e.a_id.is_a? ActsAsHavingStringId::StringId
