@@ -73,6 +73,14 @@ class ActsAsHavingStringId::Test < ActiveSupport::TestCase
     refute c.respond_to? :a_id
   end
 
+  test "has_and_belongs_to_many relationship" do
+    a = A.create!
+    d = a.ds.create!
+
+    refute a.respond_to? :d_id
+    refute d.respond_to? :a_id
+  end
+
   test "has_one relationship" do
     a = A.create!
     e = ::E.create! a: a
