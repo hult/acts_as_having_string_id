@@ -10,25 +10,46 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161013082302) do
+ActiveRecord::Schema.define(version: 20170427141007) do
 
-  create_table "details", force: :cascade do |t|
-    t.integer  "my_other_model_id"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
-    t.index ["my_other_model_id"], name: "index_details_on_my_other_model_id"
-  end
-
-  create_table "my_models", force: :cascade do |t|
+  create_table "as", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "my_other_models", force: :cascade do |t|
-    t.integer  "my_model_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-    t.index ["my_model_id"], name: "index_my_other_models_on_my_model_id"
+  create_table "as_ds", force: :cascade do |t|
+    t.integer  "a_id"
+    t.integer  "d_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["a_id"], name: "index_as_ds_on_a_id"
+    t.index ["d_id"], name: "index_as_ds_on_d_id"
+  end
+
+  create_table "bs", force: :cascade do |t|
+    t.integer  "a_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["a_id"], name: "index_bs_on_a_id"
+  end
+
+  create_table "cs", force: :cascade do |t|
+    t.integer  "b_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["b_id"], name: "index_cs_on_b_id"
+  end
+
+  create_table "ds", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "es", force: :cascade do |t|
+    t.integer  "a_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["a_id"], name: "index_es_on_a_id"
   end
 
 end
