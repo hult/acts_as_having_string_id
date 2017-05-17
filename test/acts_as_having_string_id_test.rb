@@ -54,20 +54,14 @@ class ActsAsHavingStringId::Test < ActiveSupport::TestCase
     assert_includes a.cs, c
   end
 
-  test "has_many relationship without belongs_to" do
-    assert false
-  end
-
-  test "belongs_to relationship without has_many" do
-    assert false
-  end
-
-  test "has_many/belongs_to relationship" do
+  test "has_many relationship" do
     a = A.create!
     b = B.create! a: a
 
+    refute a.respond_to? :a_id
     refute a.respond_to? :b_id
     assert b.a_id.is_a? ActsAsHavingStringId::StringId
+    refute b.respond_to? :b_id
   end
 
   test "has_many :through relationship" do
