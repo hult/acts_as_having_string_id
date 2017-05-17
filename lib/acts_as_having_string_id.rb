@@ -9,6 +9,11 @@ module ActsAsHavingStringId
   module ClassMethods
     def acts_as_having_string_id(options = {})
       class_eval do
+        def self.acts_as_having_string_id?
+          # This class does act as having string id
+          true
+        end
+
         attrib_type = ActsAsHavingStringId::StringId::Type.new(self)
         attribute :id, attrib_type
 
@@ -18,7 +23,10 @@ module ActsAsHavingStringId
               attribute r.foreign_key.to_sym, attrib_type
             end
           elsif r.is_a?(ActiveRecord::Reflection::BelongsToReflection)
-            attribute r.foreign_key.to_sym, attrib_type
+            if r.klass.respond_to?(:acts_as_having_string_id?) && \
+              r.klass.acts_as_having_string_id?
+              attribute r.foreign_key.to_sym, attrib_type
+            end
           end
         end
 

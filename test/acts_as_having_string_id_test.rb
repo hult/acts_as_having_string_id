@@ -88,4 +88,11 @@ class ActsAsHavingStringId::Test < ActiveSupport::TestCase
     refute a.respond_to? :e_id
     assert e.a_id.is_a? ActsAsHavingStringId::StringId
   end
+
+  test "belongs_to non-acts_as_having_string_id model" do
+    f = F.create!
+    a = A.create! f: f
+
+    assert a.f_id.is_a? Integer
+  end
 end

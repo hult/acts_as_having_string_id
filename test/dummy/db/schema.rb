@@ -10,11 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170427141007) do
+ActiveRecord::Schema.define(version: 20170517134233) do
 
   create_table "as", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "f_id"
   end
 
   create_table "as_ds", force: :cascade do |t|
@@ -50,6 +51,11 @@ ActiveRecord::Schema.define(version: 20170427141007) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["a_id"], name: "index_es_on_a_id"
+  end
+
+  create_table "fs", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end
