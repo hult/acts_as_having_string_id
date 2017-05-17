@@ -13,11 +13,12 @@ module ActsAsHavingStringId
         attribute :id, attrib_type
 
         self.reflections.each_value do |r|
-          # Attribute all foreign keys pointing here as well
-          unless r.is_a? ActiveRecord::Reflection::ThroughReflection
+          if r.is_a?(ActiveRecord::Reflection::HasManyReflection)
             r.klass.class_eval do
               attribute r.foreign_key.to_sym, attrib_type
             end
+          elsif r.is_a?(ActiveRecord::Reflection::BelongsToReflection)
+            attribute r.foreign_key.to_sym, attrib_type
           end
         end
 
