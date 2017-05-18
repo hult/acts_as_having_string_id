@@ -1,2 +1,0 @@
-class Publisher < ApplicationRecord
-end

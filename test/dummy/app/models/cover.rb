@@ -1,2 +1,0 @@
-class Cover < ApplicationRecord
-end

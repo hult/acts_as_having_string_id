@@ -2,34 +2,15 @@ require 'test_helper'
 require 'acts_as_having_string_id'
 
 class ActsAsHavingStringId::Test < ActiveSupport::TestCase
-  models = [:Author, :Book]
-
-  i_suck_and_my_tests_are_order_dependent!
-
-  setup do
-    models.each do |m|
-      load "./test/dummy/app/models/#{m.to_s.underscore}.rb"
-      Object.const_get(m)
+  test "your id a StringId" do
+    class Author3 < ApplicationRecord
+      self.table_name = 'authors'
+      acts_as_having_string_id
     end
-  end
 
-  teardown do
-    models.each do |m|
-      if Object.const_defined? m
-        p "REMOVING #{m}"
-        Object.send :remove_const, m
-      end
-    end
+    author = Author3.create!
+    assert author.id.is_a?(ActsAsHavingStringId::StringId)
   end
-
-  # test "your id a StringId" do
-  #   class ::Author
-  #     acts_as_having_string_id
-  #   end
-  #
-  #   author = Author.create!
-  #   assert author.id.is_a?(ActsAsHavingStringId::StringId)
-  # end
   #
   # test "adds id_string and id_int class methods" do
   #   class Author
@@ -113,46 +94,48 @@ class ActsAsHavingStringId::Test < ActiveSupport::TestCase
   # end
 
   test "has_many/belongs_to relationship, both string id" do
-    class ::Author
-      has_many :books
+    class Book1 < ApplicationRecord
+      self.table_name = 'books'
+    end
+
+    class Author1 < ApplicationRecord
+      self.table_name = 'authors'
+      has_many :books, class_name: 'Book1'
       acts_as_having_string_id
     end
 
-    class ::Book
-      belongs_to :author
+    class Book1 < ApplicationRecord
+      belongs_to :author, class_name: 'Author1'
       acts_as_having_string_id
     end
 
-    author = Author.create!
-    book = Book.create! author: author
+    author = Author1.create!
+    book = Book1.create! author: author
 
     assert author.id.is_a? ActsAsHavingStringId::StringId
     assert book.id.is_a? ActsAsHavingStringId::StringId
-    p book.author_id, book.author_id.class
     assert book.author_id.is_a? ActsAsHavingStringId::StringId
   end
 
   test "has_many/belongs_to relationship, only belonger string id" do
-    puts 'BEFORE AUTHOR', Author.respond_to?(:acts_as_having_string_id?)
-
-    class ::Author
-      has_many :books
+    class Book2 < ApplicationRecord
+      self.table_name = 'books'
     end
-    puts 'AFTER AUTHOR', Author.respond_to?(:acts_as_having_string_id?)
 
-    class ::Book
-      belongs_to :author
+    class Author2 < ApplicationRecord
+      self.table_name = 'authors'
+      has_many :books, class_name: 'Book2'
+    end
+
+    class Book2 < ApplicationRecord
+      belongs_to :author, class_name: 'Author2'
       acts_as_having_string_id
     end
 
-    puts 'AFTER BOOK', Author.respond_to?(:acts_as_having_string_id?),
-      Author.respond_to?(:id_string)
-
-    author = Author.create!
-    book = Book.create! author: author
+    author = Author2.create!
+    book = Book2.create! author: author
 
     assert author.id.is_a? Integer
-    p book.author_id.class
     assert book.author_id.class <= Integer
   end
 end

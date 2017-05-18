@@ -9,7 +9,6 @@ module ActsAsHavingStringId
   module ClassMethods
     def acts_as_having_string_id(options = {})
       class_eval do
-        puts "AAHSI #{self.name}"
         def self.acts_as_having_string_id?
           # This class does act as having string id
           true
@@ -20,14 +19,12 @@ module ActsAsHavingStringId
 
         self.reflections.each_value do |r|
           if r.is_a?(ActiveRecord::Reflection::HasManyReflection)
-            puts "AAHSI #{self.name} on another: #{r.klass.name} #{r.foreign_key.to_sym}"
             r.klass.class_eval do
               attribute r.foreign_key.to_sym, attrib_type
             end
           elsif r.is_a?(ActiveRecord::Reflection::BelongsToReflection)
             if r.klass.respond_to?(:acts_as_having_string_id?) && \
               r.klass.acts_as_having_string_id?
-              puts "AAHSI #{self.name} on self (#{r.klass.name}, #{r.klass.acts_as_having_string_id?}): #{self.name} #{r.foreign_key.to_sym}"
               attribute r.foreign_key.to_sym, attrib_type
             end
           end
