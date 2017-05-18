@@ -11,15 +11,16 @@ class ActsAsHavingStringId::Test < ActiveSupport::TestCase
     author = Author3.create!
     assert author.id.is_a?(ActsAsHavingStringId::StringId)
   end
-  #
-  # test "adds id_string and id_int class methods" do
-  #   class Author
-  #     acts_as_having_string_id
-  #   end
-  #
-  #   assert_equal "Kp8obxHLxnq", Author.id_string(1)
-  #   assert_equal 1, Author.id_int("Kp8obxHLxnq")
-  # end
+
+  test "adds id_string and id_int class methods" do
+    class Author4 < ApplicationRecord
+      self.table_name = 'authors'
+      acts_as_having_string_id
+    end
+
+    assert_equal "6ZEuSzrFTNW", Author4.id_string(1)
+    assert_equal 1, Author4.id_int("6ZEuSzrFTNW")
+  end
   #
   # test "find supports int, string and StringId" do
   #   class Author
