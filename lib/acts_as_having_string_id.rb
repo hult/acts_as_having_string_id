@@ -27,7 +27,7 @@ module ActsAsHavingStringId
           elsif r.is_a?(ActiveRecord::Reflection::BelongsToReflection)
             if r.klass.respond_to?(:acts_as_having_string_id?) && \
               r.klass.acts_as_having_string_id?
-              puts "AAHSI #{self.name} on self: #{self.name} #{r.foreign_key.to_sym}"
+              puts "AAHSI #{self.name} on self (#{r.klass.name}, #{r.klass.acts_as_having_string_id?}): #{self.name} #{r.foreign_key.to_sym}"
               attribute r.foreign_key.to_sym, attrib_type
             end
           end

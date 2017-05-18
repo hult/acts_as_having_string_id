@@ -4,6 +4,8 @@ require 'acts_as_having_string_id'
 class ActsAsHavingStringId::Test < ActiveSupport::TestCase
   models = [:Author, :Book]
 
+  i_suck_and_my_tests_are_order_dependent!
+
   setup do
     models.each do |m|
       load "./test/dummy/app/models/#{m.to_s.underscore}.rb"
@@ -131,14 +133,20 @@ class ActsAsHavingStringId::Test < ActiveSupport::TestCase
   end
 
   test "has_many/belongs_to relationship, only belonger string id" do
+    puts 'BEFORE AUTHOR', Author.respond_to?(:acts_as_having_string_id?)
+
     class ::Author
       has_many :books
     end
+    puts 'AFTER AUTHOR', Author.respond_to?(:acts_as_having_string_id?)
 
     class ::Book
       belongs_to :author
       acts_as_having_string_id
     end
+
+    puts 'AFTER BOOK', Author.respond_to?(:acts_as_having_string_id?),
+      Author.respond_to?(:id_string)
 
     author = Author.create!
     book = Book.create! author: author
