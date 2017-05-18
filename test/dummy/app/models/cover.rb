@@ -1,0 +1,2 @@
+class Cover < ApplicationRecord
+end

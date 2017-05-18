@@ -1,98 +1,150 @@
 require 'test_helper'
+require 'acts_as_having_string_id'
 
 class ActsAsHavingStringId::Test < ActiveSupport::TestCase
-  test "id is a StringId" do
-    a = A.create!
-    assert a.id.is_a?(ActsAsHavingStringId::StringId)
-  end
+  models = [:Author, :Book]
 
-  test "id_string and id_int class methods work" do
-    assert_equal "Kp8obxHLxnq", A.id_string(1)
-    assert_equal 1, A.id_int("Kp8obxHLxnq")
-  end
-
-  test "allows finding by both int, string and StringId" do
-    a = A.create!
-    ns = A.find(a.id.to_s)
-    assert_equal a, ns
-    ni = A.find(a.id.to_i)
-    assert_equal a, ni
-    nsi = A.find(a.id)
-    assert_equal a, nsi
-  end
-
-  test "allows having both int, string and StringId in a where statement" do
-    a = A.create!
-    ns = A.where(id: a.id.to_s).first
-    assert_equal a, ns
-    ni = A.where(id: a.id.to_i).first
-    assert_equal a, ni
-    nsi = A.where(id: a.id).first
-    assert_equal a, nsi
-  end
-
-  test "assigning foreign keys both as int, string and StringId works" do
-    si5 = ActsAsHavingStringId::StringId.new(A, 5)
-    b = B.new a_id: si5.to_i
-    assert_equal si5, b.a_id
-    b = B.new a_id: si5.to_s
-    assert_equal si5, b.a_id
-    b = B.new a_id: si5
-    assert_equal si5, b.a_id
-  end
-
-  test "finding by an invalid string id gives a 404" do
-    assert_raises ActiveRecord::RecordNotFound do
-      A.find("alice@example.com")
+  setup do
+    models.each do |m|
+      load "./test/dummy/app/models/#{m.to_s.underscore}.rb"
+      Object.const_get(m)
     end
   end
 
-  test "following a has_many :through relation works" do
-    a = A.create!
-    b = B.create! a: a
-    c = C.create! b: b
-    assert_includes a.cs, c
+  teardown do
+    models.each do |m|
+      if Object.const_defined? m
+        p "REMOVING #{m}"
+        Object.send :remove_const, m
+      end
+    end
   end
 
-  test "has_many relationship" do
-    a = A.create!
-    b = B.create! a: a
+  # test "your id a StringId" do
+  #   class ::Author
+  #     acts_as_having_string_id
+  #   end
+  #
+  #   author = Author.create!
+  #   assert author.id.is_a?(ActsAsHavingStringId::StringId)
+  # end
+  #
+  # test "adds id_string and id_int class methods" do
+  #   class Author
+  #     acts_as_having_string_id
+  #   end
+  #
+  #   assert_equal "Kp8obxHLxnq", Author.id_string(1)
+  #   assert_equal 1, Author.id_int("Kp8obxHLxnq")
+  # end
+  #
+  # test "find supports int, string and StringId" do
+  #   class Author
+  #     acts_as_having_string_id
+  #   end
+  #
+  #   author = Author.create!
+  #
+  #   author_by_string = Author.find(author.id.to_s)
+  #   assert_equal author, author_by_string
+  #
+  #   author_by_int = Author.find(author.id.to_i)
+  #   assert_equal author, author_by_int
+  #
+  #   author_by_string_id = Author.find(a.id)
+  #   assert_equal author, author_by_string_id
+  # end
+  #
+  # test "where statements support string, int and StringId" do
+  #   class Author
+  #     acts_as_having_string_id
+  #   end
+  #
+  #   author = Author.create!
+  #
+  #   author_by_string = Author.where(id: author.id.to_s).first
+  #   assert_equal author, author_by_string
+  #
+  #   author_by_int = Author.where(id: author.id.to_i).first
+  #   assert_equal author, author_by_int
+  #
+  #   author_by_string_id = Author.where(id: a.id).first
+  #   assert_equal author, author_by_string_id
+  # end
+  #
+  # test "supports assigning foreign keys both as int, string and StringId" do
+  #   class Book
+  #     belongs_to :author
+  #   end
+  #
+  #   class Author
+  #     acts_as_having_string_id
+  #   end
+  #
+  #   author_id = ActsAsHavingStringId::StringId.new(Author, 5)
+  #
+  #   book = Book.new author_id: author_id.to_s
+  #   assert_equal author_id, book.author_id
+  #
+  #   book = Book.new author_id: author_id.to_i
+  #   assert_equal author_id, book.a_id
+  #
+  #   book = B.new author_id: author_id
+  #   assert_equal author_id, book.author_id
+  # end
+  #
+  # test "finding by an invalid string id means not found" do
+  #   class Author
+  #     acts_as_having_string_id
+  #   end
+  #
+  #   assert_raises ActiveRecord::RecordNotFound do
+  #     Author.find("alice@example.com")
+  #   end
+  # end
+  #
+  # test "following a has_many :through relation works" do
+  #   a = A.create!
+  #   b = B.create! a: a
+  #   c = C.create! b: b
+  #   assert_includes a.cs, c
+  # end
 
-    refute a.respond_to? :a_id
-    refute a.respond_to? :b_id
-    assert b.a_id.is_a? ActsAsHavingStringId::StringId
-    refute b.respond_to? :b_id
+  test "has_many/belongs_to relationship, both string id" do
+    class ::Author
+      has_many :books
+      acts_as_having_string_id
+    end
+
+    class ::Book
+      belongs_to :author
+      acts_as_having_string_id
+    end
+
+    author = Author.create!
+    book = Book.create! author: author
+
+    assert author.id.is_a? ActsAsHavingStringId::StringId
+    assert book.id.is_a? ActsAsHavingStringId::StringId
+    p book.author_id, book.author_id.class
+    assert book.author_id.is_a? ActsAsHavingStringId::StringId
   end
 
-  test "has_many :through relationship" do
-    a = A.create!
-    b = B.create! a: a
-    c = C.create! b: b
+  test "has_many/belongs_to relationship, only belonger string id" do
+    class ::Author
+      has_many :books
+    end
 
-    refute a.respond_to? :c_id
-    refute c.respond_to? :a_id
-  end
+    class ::Book
+      belongs_to :author
+      acts_as_having_string_id
+    end
 
-  test "has_and_belongs_to_many relationship" do
-    a = A.create!
-    d = a.ds.create!
+    author = Author.create!
+    book = Book.create! author: author
 
-    refute a.respond_to? :d_id
-    refute d.respond_to? :a_id
-  end
-
-  test "has_one relationship" do
-    a = A.create!
-    e = ::E.create! a: a
-
-    refute a.respond_to? :e_id
-    assert e.a_id.is_a? ActsAsHavingStringId::StringId
-  end
-
-  test "belongs_to non-acts_as_having_string_id model" do
-    f = F.create!
-    a = A.create! f: f
-
-    assert a.f_id.is_a? Integer
+    assert author.id.is_a? Integer
+    p book.author_id.class
+    assert book.author_id.class <= Integer
   end
 end

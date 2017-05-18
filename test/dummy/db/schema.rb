@@ -10,13 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170517134233) do
-
-  create_table "as", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer  "f_id"
-  end
+ActiveRecord::Schema.define(version: 20170518083906) do
 
   create_table "as_ds", force: :cascade do |t|
     t.integer  "a_id"
@@ -27,33 +21,49 @@ ActiveRecord::Schema.define(version: 20170517134233) do
     t.index ["d_id"], name: "index_as_ds_on_d_id"
   end
 
-  create_table "bs", force: :cascade do |t|
-    t.integer  "a_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["a_id"], name: "index_bs_on_a_id"
-  end
-
-  create_table "cs", force: :cascade do |t|
-    t.integer  "b_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["b_id"], name: "index_cs_on_b_id"
-  end
-
-  create_table "ds", force: :cascade do |t|
+  create_table "authors", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "es", force: :cascade do |t|
-    t.integer  "a_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["a_id"], name: "index_es_on_a_id"
+  create_table "authors_publishers", force: :cascade do |t|
+    t.integer  "author_id"
+    t.integer  "publisher_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.index ["author_id"], name: "index_authors_publishers_on_author_id"
+    t.index ["publisher_id"], name: "index_authors_publishers_on_publisher_id"
   end
 
-  create_table "fs", force: :cascade do |t|
+  create_table "books", force: :cascade do |t|
+    t.integer  "author_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_books_on_author_id"
+  end
+
+  create_table "covers", force: :cascade do |t|
+    t.integer  "book_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["book_id"], name: "index_covers_on_book_id"
+  end
+
+  create_table "editions", force: :cascade do |t|
+    t.integer  "book_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["book_id"], name: "index_editions_on_book_id"
+  end
+
+  create_table "images", force: :cascade do |t|
+    t.integer  "cover_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cover_id"], name: "index_images_on_cover_id"
+  end
+
+  create_table "publishers", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
