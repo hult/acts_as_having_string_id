@@ -1,81 +1,71 @@
 require 'test_helper'
 require 'acts_as_having_string_id'
 
+class AuthorWithStringId < ApplicationRecord
+  self.table_name = 'authors'
+  acts_as_having_string_id
+end
+
 class ActsAsHavingStringId::Test < ActiveSupport::TestCase
   test "your id a StringId" do
+    author = AuthorWithStringId.create!
+    assert author.id.is_a?(ActsAsHavingStringId::StringId)
+  end
+
+  test "adds id_string and id_int class methods" do
+    assert_equal "6ZEuSzrFTNW", AuthorWithStringId.id_string(1)
+    assert_equal 1, AuthorWithStringId.id_int("6ZEuSzrFTNW")
+  end
+
+  test "find supports int, string and StringId" do
+    author = AuthorWithStringId.create!
+
+    author_by_string = AuthorWithStringId.find(author.id.to_s)
+    assert_equal author, author_by_string
+
+    author_by_int = AuthorWithStringId.find(author.id.to_i)
+    assert_equal author, author_by_int
+
+    author_by_string_id = AuthorWithStringId.find(author.id)
+    assert_equal author, author_by_string_id
+  end
+
+  test "where statements support string, int and StringId" do
+    author = AuthorWithStringId.create!
+
+    author_by_string = AuthorWithStringId.where(id: author.id.to_s).first
+    assert_equal author, author_by_string
+
+    author_by_int = AuthorWithStringId.where(id: author.id.to_i).first
+    assert_equal author, author_by_int
+
+    author_by_string_id = AuthorWithStringId.where(id: author.id).first
+    assert_equal author, author_by_string_id
+  end
+
+  test "supports assigning foreign keys both as int, string and StringId" do
     class Author3 < ApplicationRecord
       self.table_name = 'authors'
       acts_as_having_string_id
     end
 
-    author = Author3.create!
-    assert author.id.is_a?(ActsAsHavingStringId::StringId)
-  end
-
-  test "adds id_string and id_int class methods" do
-    class Author4 < ApplicationRecord
-      self.table_name = 'authors'
+    class Book3 < ApplicationRecord
+      self.table_name = 'books'
+      belongs_to :author, class_name: 'Author3'
       acts_as_having_string_id
     end
 
-    assert_equal "6ZEuSzrFTNW", Author4.id_string(1)
-    assert_equal 1, Author4.id_int("6ZEuSzrFTNW")
+    author_id = ActsAsHavingStringId::StringId.new(Author3, 5)
+
+    book = Book3.new author_id: author_id.to_s
+    assert_equal author_id, book.author_id
+
+    book = Book3.new author_id: author_id.to_i
+    assert_equal author_id, book.author_id
+
+    book = Book3.new author_id: author_id
+    assert_equal author_id, book.author_id
   end
-  #
-  # test "find supports int, string and StringId" do
-  #   class Author
-  #     acts_as_having_string_id
-  #   end
-  #
-  #   author = Author.create!
-  #
-  #   author_by_string = Author.find(author.id.to_s)
-  #   assert_equal author, author_by_string
-  #
-  #   author_by_int = Author.find(author.id.to_i)
-  #   assert_equal author, author_by_int
-  #
-  #   author_by_string_id = Author.find(a.id)
-  #   assert_equal author, author_by_string_id
-  # end
-  #
-  # test "where statements support string, int and StringId" do
-  #   class Author
-  #     acts_as_having_string_id
-  #   end
-  #
-  #   author = Author.create!
-  #
-  #   author_by_string = Author.where(id: author.id.to_s).first
-  #   assert_equal author, author_by_string
-  #
-  #   author_by_int = Author.where(id: author.id.to_i).first
-  #   assert_equal author, author_by_int
-  #
-  #   author_by_string_id = Author.where(id: a.id).first
-  #   assert_equal author, author_by_string_id
-  # end
-  #
-  # test "supports assigning foreign keys both as int, string and StringId" do
-  #   class Book
-  #     belongs_to :author
-  #   end
-  #
-  #   class Author
-  #     acts_as_having_string_id
-  #   end
-  #
-  #   author_id = ActsAsHavingStringId::StringId.new(Author, 5)
-  #
-  #   book = Book.new author_id: author_id.to_s
-  #   assert_equal author_id, book.author_id
-  #
-  #   book = Book.new author_id: author_id.to_i
-  #   assert_equal author_id, book.a_id
-  #
-  #   book = B.new author_id: author_id
-  #   assert_equal author_id, book.author_id
-  # end
   #
   # test "finding by an invalid string id means not found" do
   #   class Author
