@@ -13,8 +13,8 @@ class ActsAsHavingStringId::Test < ActiveSupport::TestCase
   end
 
   test "adds id_string and id_int class methods" do
-    assert_equal "6ZEuSzrFTNW", AuthorWithStringId.id_string(1)
-    assert_equal 1, AuthorWithStringId.id_int("6ZEuSzrFTNW")
+    assert_equal "ssRuI3aTLF", AuthorWithStringId.id_string(1)
+    assert_equal 1, AuthorWithStringId.id_int("ssRuI3aTLF")
   end
 
   test "find supports int, string and StringId" do

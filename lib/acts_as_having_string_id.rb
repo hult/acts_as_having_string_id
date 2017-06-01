@@ -25,7 +25,8 @@ module ActsAsHavingStringId
           elsif r.is_a?(ActiveRecord::Reflection::BelongsToReflection)
             if r.klass.respond_to?(:acts_as_having_string_id?) && \
               r.klass.acts_as_having_string_id?
-              attribute r.foreign_key.to_sym, attrib_type
+              foreign_attrib_type = ActsAsHavingStringId::StringId::Type.new(r.klass)
+              attribute r.foreign_key.to_sym, foreign_attrib_type
             end
           end
         end
