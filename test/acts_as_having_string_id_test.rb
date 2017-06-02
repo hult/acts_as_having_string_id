@@ -141,6 +141,10 @@ class ActsAsHavingStringId::Test < ActiveSupport::TestCase
     book = author.books.create!
     cover = book.covers.create!
     assert_includes author.covers, cover
+
+    assert author.id.is_a? ActsAsHavingStringId::StringId
+    assert book.id.is_a? ActsAsHavingStringId::StringId
+    assert cover.id.is_a? ActsAsHavingStringId::StringId
   end
 
   test "has_and_belongs_to_many relationship works" do
