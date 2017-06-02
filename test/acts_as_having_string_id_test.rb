@@ -73,27 +73,6 @@ class ActsAsHavingStringId::Test < ActiveSupport::TestCase
     end
   end
 
-  test "has_many :through works" do
-    class Cover < ApplicationRecord
-    end
-
-    class Book4 < ApplicationRecord
-      self.table_name = 'books'
-      has_many :covers, class_name: 'Cover', foreign_key: 'book_id'
-    end
-
-    class Author4 < ApplicationRecord
-      self.table_name = 'authors'
-      has_many :books, class_name: 'Book4', foreign_key: 'author_id'
-      has_many :covers, through: :books
-    end
-
-    author = Author4.create!
-    book = author.books.create!
-    cover = book.covers.create!
-    assert_includes author.covers, cover
-  end
-
   test "has_many/belongs_to relationship, both string id" do
     class Book1 < ApplicationRecord
       self.table_name = 'books'
@@ -140,7 +119,43 @@ class ActsAsHavingStringId::Test < ActiveSupport::TestCase
     assert book.author_id.class <= Integer
   end
 
-  test "has_and_belongs_to_many" do
-    assert false
+  test "has_many :through works" do
+    class Cover < ApplicationRecord
+      acts_as_having_string_id
+    end
+
+    class Book4 < ApplicationRecord
+      self.table_name = 'books'
+      has_many :covers, class_name: 'Cover', foreign_key: 'book_id'
+      acts_as_having_string_id
+    end
+
+    class Author4 < ApplicationRecord
+      self.table_name = 'authors'
+      has_many :books, class_name: 'Book4', foreign_key: 'author_id'
+      has_many :covers, through: :books
+      acts_as_having_string_id
+    end
+
+    author = Author4.create!
+    book = author.books.create!
+    cover = book.covers.create!
+    assert_includes author.covers, cover
+  end
+
+  test "has_and_belongs_to_many relationship works" do
+    class Author5 < ApplicationRecord
+      self.table_name = 'authors'
+      has_and_belongs_to_many :publishers, foreign_key: 'author_id'
+      acts_as_having_string_id
+    end
+
+    class Publisher < ApplicationRecord
+      has_and_belongs_to_many :authors, class_name: 'Author5'
+      acts_as_having_string_id
+    end
+
+    author = Author5.create!
+    author.publishers.create!
   end
 end
