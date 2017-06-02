@@ -72,13 +72,27 @@ class ActsAsHavingStringId::Test < ActiveSupport::TestCase
       AuthorWithStringId.find("alice@example.com")
     end
   end
-  #
-  # test "following a has_many :through relation works" do
-  #   a = A.create!
-  #   b = B.create! a: a
-  #   c = C.create! b: b
-  #   assert_includes a.cs, c
-  # end
+
+  test "has_many :through works" do
+    class Cover < ApplicationRecord
+    end
+
+    class Book4 < ApplicationRecord
+      self.table_name = 'books'
+      has_many :covers, class_name: 'Cover', foreign_key: 'book_id'
+    end
+
+    class Author4 < ApplicationRecord
+      self.table_name = 'authors'
+      has_many :books, class_name: 'Book4', foreign_key: 'author_id'
+      has_many :covers, through: :books
+    end
+
+    author = Author4.create!
+    book = author.books.create!
+    cover = book.covers.create!
+    assert_includes author.covers, cover
+  end
 
   test "has_many/belongs_to relationship, both string id" do
     class Book1 < ApplicationRecord
