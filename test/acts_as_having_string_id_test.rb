@@ -139,4 +139,8 @@ class ActsAsHavingStringId::Test < ActiveSupport::TestCase
     assert author.id.is_a? Integer
     assert book.author_id.class <= Integer
   end
+
+  test "has_and_belongs_to_many" do
+    assert false
+  end
 end
