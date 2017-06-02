@@ -160,6 +160,9 @@ class ActsAsHavingStringId::Test < ActiveSupport::TestCase
     end
 
     author = Author5.create!
-    author.publishers.create!
+    publisher = author.publishers.create!
+
+    assert author.id.is_a? ActsAsHavingStringId::StringId
+    assert publisher.id.is_a? ActsAsHavingStringId::StringId
   end
 end
