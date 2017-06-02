@@ -66,16 +66,12 @@ class ActsAsHavingStringId::Test < ActiveSupport::TestCase
     book = Book3.new author_id: author_id
     assert_equal author_id, book.author_id
   end
-  #
-  # test "finding by an invalid string id means not found" do
-  #   class Author
-  #     acts_as_having_string_id
-  #   end
-  #
-  #   assert_raises ActiveRecord::RecordNotFound do
-  #     Author.find("alice@example.com")
-  #   end
-  # end
+
+  test "finding by an invalid string id means not found" do
+    assert_raises ActiveRecord::RecordNotFound do
+      AuthorWithStringId.find("alice@example.com")
+    end
+  end
   #
   # test "following a has_many :through relation works" do
   #   a = A.create!
