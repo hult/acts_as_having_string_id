@@ -45,10 +45,6 @@ module ActsAsHavingStringId
         @klass = klass
       end
 
-      def type
-        :integer
-      end
-
       def deserialize(value)
         if value.is_a?(String) || value.class <= Integer
           ActsAsHavingStringId::StringId(@klass, value)
