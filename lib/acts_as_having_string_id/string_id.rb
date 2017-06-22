@@ -48,10 +48,8 @@ module ActsAsHavingStringId
       def deserialize(value)
         if value.is_a?(String) || value.class <= Integer
           ActsAsHavingStringId::StringId(@klass, value)
-        elsif value == nil
-          nil
         else
-          super
+          value
         end
       end
 
