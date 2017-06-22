@@ -39,21 +39,13 @@ module ActsAsHavingStringId
       other.is_a?(StringId) && other.int_value == int_value
     end
 
-    class Type < ActiveRecord::Type::Value
+    class Type < ActiveRecord::Type::Integer
       def initialize(klass)
         @klass = klass
       end
 
       def type
         :integer
-      end
-
-      def cast(value)
-        if value == nil
-          nil
-        else
-          ActsAsHavingStringId::StringId(@klass, value)
-        end
       end
 
       def deserialize(value)
@@ -72,6 +64,12 @@ module ActsAsHavingStringId
         else
           ActsAsHavingStringId::StringId(@klass, value).int_value
         end
+      end
+
+      private
+
+      def cast_value(value)
+        ActsAsHavingStringId::StringId(@klass, value)
       end
     end
   end
