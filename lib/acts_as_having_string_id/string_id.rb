@@ -41,6 +41,7 @@ module ActsAsHavingStringId
 
     class Type < ActiveRecord::Type::Integer
       def initialize(klass)
+        super()
         @klass = klass
       end
 
@@ -59,11 +60,11 @@ module ActsAsHavingStringId
       end
 
       def serialize(value)
-        if value == nil
-          nil
-        else
-          ActsAsHavingStringId::StringId(@klass, value).int_value
+        result = cast(value)
+        if result
+          ensure_in_range(result.to_i)
         end
+        result
       end
 
       private
