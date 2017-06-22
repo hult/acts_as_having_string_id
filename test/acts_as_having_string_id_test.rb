@@ -73,6 +73,13 @@ class ActsAsHavingStringId::Test < ActiveSupport::TestCase
     end
   end
 
+  test "serializing too large an id means range error" do
+    assert_raises ActiveModel::RangeError do
+      t = ActsAsHavingStringId::StringId::Type.new(AuthorWithStringId)
+      t.serialize(AuthorWithStringId.id_string(2**33))
+    end
+  end
+
   test "has_many/belongs_to relationship, both string id" do
     class Book1 < ApplicationRecord
       self.table_name = 'books'
