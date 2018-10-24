@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    acts_as_having_string_id (0.2.6)
+    acts_as_having_string_id (0.2.7)
       base62 (~> 1.0.0)
       rails (~> 5.0, >= 5.0.0.1)
 
@@ -120,4 +120,4 @@ DEPENDENCIES
   sqlite3
 
 BUNDLED WITH
-   1.14.6
+   1.16.1
