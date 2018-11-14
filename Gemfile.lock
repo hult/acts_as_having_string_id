@@ -48,7 +48,7 @@ GEM
     arel (8.0.0)
     base62 (1.0.0)
     builder (3.2.3)
-    codecov (0.1.13)
+    codecov (0.1.14)
       json
       simplecov
       url
