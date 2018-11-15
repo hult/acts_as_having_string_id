@@ -116,6 +116,30 @@ And, conversely, getting the ID from the string representation
 
 And that's just about it!
 
+## But I'm getting these weird type cast errors
+
+If you have `has_many :through` relations in your app, you may need to add a few associations more in your app in order for Rails to understand how your data model fits together. For example in this model
+
+```ruby
+class Author < ApplicationRecord
+end
+
+class Blog < ApplicationRecord
+  has_many :posts
+  has_many :authors, through: :posts
+  acts_as_having_string_id
+end
+
+class Post < ApplicationRecord
+  belongs_to :blog
+  belongs_to :author
+end
+```
+
+an attempt to do `Blog.first.authors` will raise a `TypeError: can't cast ActsAsHavingStringId::StringId`.
+
+In order to fix this, you'll need to add the missing association `has_many :posts` to `Author`.
+
 ## TODO
 * Since the `MyModel.find("7EajpSfdWIf")` functionality depends on the argument now being a string, `MyModel.find("5")` will no longer mean `MyModel.find(5)`, but rather `MyModel.find(4387534)` or something. Is that a problem?
 * It's a potential security problem that we don't force strings from controllers (integer id coming from JSON postdata will make it find by original id)
