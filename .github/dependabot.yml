@@ -1,0 +1,16 @@
+version: 2
+updates:
+- package-ecosystem: bundler
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "04:00"
+  open-pull-requests-limit: 30
+  ignore:
+  - dependency-name: codecov
+    versions:
+    - 0.4.2
+    - 0.4.3
+    - 0.5.0
+    - 0.5.1
+  rebase-strategy: disabled
